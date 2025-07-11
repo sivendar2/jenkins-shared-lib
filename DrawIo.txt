@@ -5,8 +5,13 @@ graph TD
     D --> E[Parse Scan Reports]:::parse
     E --> F(Read CVE Map):::map
     F --> G{Rule Match Found?}:::decision
-    G -- Yes --> H(Autofix Engine):::fix
+
     G -- No --> I(Log and Skip):::skip
+    G -- Yes --> H1[Check Autofix Eligibility]:::map
+    H1 --> H2{Can Auto-Fix?}:::decision
+    H2 -- No --> I
+    H2 -- Yes --> H(Autofix Engine\nSemgrep Autofix / GPT Fixer):::fix
+
     H --> J[Generate Patch]:::patch
     J --> K(Create Branch & Commit):::commit
     K --> L[[Push PR to GitHub]]:::pr
