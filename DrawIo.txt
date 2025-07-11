@@ -1,7 +1,7 @@
 graph TD
-    A((Start)):::start --> B(Prepare Source\nGit Clone / ZIP / Sparse):::source
-    B --> C(Scan Engine\nTool Orchestration):::engine
-    C --> D[Run Scanners\nSemgrep, Snyk, CodeQL, Trivy, etc.]:::scan
+    A((Start)):::start --> B(Prepare Source<br>Git Clone / ZIP / Sparse):::source
+    B --> C(Scan Engine<br>Tool Orchestration):::engine
+    C --> D[Run Scanners<br>Semgrep, Snyk, CodeQL, Trivy, etc.]:::scan
     D --> E[Parse Scan Reports]:::parse
     E --> F(Read CVE Map):::map
     F --> G{Rule Match Found?}:::decision
@@ -10,16 +10,18 @@ graph TD
     G -- Yes --> H1[Check Autofix Eligibility]:::map
     H1 --> H2{Can Auto-Fix?}:::decision
     H2 -- No --> I
-    H2 -- Yes --> H(Autofix Engine\nSemgrep Autofix / GPT Fixer):::fix
+    H2 -- Yes --> H(Autofix Engine<br>Semgrep Autofix Only):::fix
 
     H --> J[Generate Patch]:::patch
     J --> K(Create Branch & Commit):::commit
     K --> L[[Push PR to GitHub]]:::pr
-    L --> M((End of Remediation)):::endNode
-    M --> N[Trigger CI Pipeline\nRun Tests, Lint, Build]:::ci
+    L --> M((End of SAST Remediation)):::endNode
+    M --> DA[Run DAST Scan on Staging URL]:::dast
+    DA --> DB[Generate DAST Report - JSON or HTML]:::report
+    DB --> N[Trigger CI Pipeline<br>Run Tests, Lint, Build]:::ci
     N --> O{CI Passed?}:::decision
-    O -- Yes --> P[Trigger CD Pipeline\nDeploy to Staging/Prod]:::cd
-    O -- No --> Q[Log CI Failures\nNotify Developer]:::fail
+    O -- Yes --> P[Trigger CD Pipeline<br>Deploy to Prod]:::cd
+    O -- No --> Q[Log CI Failures<br>Notify Developer]:::fail
 
 classDef start fill:#B3E5FC,stroke:#0288D1,color:#000,font-weight:bold;
 classDef endNode fill:#B3E5FC,stroke:#0288D1,color:#000,font-weight:bold;
@@ -37,3 +39,5 @@ classDef pr fill:#E3F2FD,stroke:#1976D2,color:#000;
 classDef ci fill:#E0F7FA,stroke:#00ACC1,color:#000;
 classDef cd fill:#F1F8E9,stroke:#388E3C,color:#000;
 classDef fail fill:#FFCDD2,stroke:#D32F2F,color:#000;
+classDef dast fill:#E3F2FD,stroke:#3F51B5,color:#000;
+classDef report fill:#E1F5FE,stroke:#0288D1,color:#000;
