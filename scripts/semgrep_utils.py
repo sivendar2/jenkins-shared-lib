@@ -54,15 +54,22 @@ def suggest_fixes(findings):
 
     return suggestions
 
-def apply_auto_fix(file_path):
+def apply_auto_fix(file_path, finding=None):
     print(f"🛠️ Applying fix to: {file_path}")
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
     changed = False
     for i in range(len(lines)):
+        # Fix JDBC Statement usage
         if "Statement" in lines[i] and "createStatement" in lines[i]:
             lines[i] = lines[i].replace("Statement", "PreparedStatement").replace("createStatement", "prepareStatement")
+            changed = True
+
+        # Fix JdbcTemplate + SQL Injection
+        if "jdbcTemplate.query" in lines[i] and "+" in lines[i] and "\"" in lines[i]:
+            # Naive fix: insert parameterized version
+            lines[i] = '        return jdbcTemplate.query("SELECT * FROM employees WHERE department_id = ?", new BeanPropertyRowMapper<>(Employee.class), departmentName);\n'
             changed = True
 
     if changed:
@@ -71,3 +78,4 @@ def apply_auto_fix(file_path):
         print(f"✅ Applied fix in: {file_path}")
     else:
         print(f"⚠️ No fix applied to: {file_path}")
+

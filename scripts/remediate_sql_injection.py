@@ -109,24 +109,27 @@ Replace `Statement` with `PreparedStatement`
             fixes.append((file_path, suggestion))
     return fixes
 
-def apply_auto_fix(file_path):
-    with open(file_path, 'r') as f:
+def apply_auto_fix(file_path, finding):
+    print(f"🛠️ Applying fix to: {file_path}")
+    with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    fixed_lines = []
-    was_changed = False
-    for line in lines:
-        if "Statement" in line and "createStatement" in line:
-            print(f"🔧 Patching line: {line.strip()}")
-            line = line.replace("Statement", "PreparedStatement").replace("createStatement", "prepareStatement")
-            was_changed = True
-        fixed_lines.append(line)
-        if was_changed:
-         print(f"✅ Changes applied to {file_path}")
-        else:
-         print(f"⚠️ No fix needed for {file_path}")
-    with open(file_path, 'w') as f:
-        f.writelines(fixed_lines)
+    changed = False
+    for i in range(len(lines)):
+        if "Statement" in lines[i] and "createStatement" in lines[i]:
+            lines[i] = lines[i].replace("Statement", "PreparedStatement").replace("createStatement", "prepareStatement")
+            changed = True
+        elif "jdbcTemplate.query" in lines[i] and "+" in lines[i]:
+            # Example fix for JDBC template string concat
+            lines[i] = '        return jdbcTemplate.query("SELECT * FROM employees WHERE department_id = ?", new BeanPropertyRowMapper<>(Employee.class), departmentName);\n'
+            changed = True
+
+    if changed:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.writelines(lines)
+        print(f"✅ Applied fix in: {file_path}")
+    else:
+        print(f"⚠️ No fix applied to: {file_path}")
 
 def run_tests():
     print("✅ [Mock] Tests passed")
@@ -197,10 +200,10 @@ def main():
     findings = run_semgrep()
     print(f"🔍 Found {len(findings['results'])} Semgrep issue(s)")
     suggestions = suggest_fixes(findings)
-    for path, msg in suggestions:
-        print(msg)
-        full_path = os.path.join(LOCAL_REPO, path)
-        apply_auto_fix(full_path)
+    for suggestion in suggestions:
+      print(suggestion["message"])
+      full_path = os.path.join(LOCAL_REPO, suggestion["file"])
+      apply_auto_fix(full_path, suggestion)
 
     # Step 3: Test, Commit, PR, Notify
     run_tests()

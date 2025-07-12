@@ -5,3 +5,11 @@ rules:
     message: "Avoid using Statement; use PreparedStatement instead."
     pattern: |
       Statement $S = $C.createStatement();
+  - id: java-sqli-inline-query
+    languages: [java]
+    severity: ERROR
+    message: "SQL Injection in JdbcTemplate"
+    pattern: |
+      $J.query("SELECT * FROM employees WHERE department_id = '" + $X + "'", new BeanPropertyRowMapper<>($T.class));
+    fix: |
+      $J.query("SELECT * FROM employees WHERE department_id = ?", new BeanPropertyRowMapper<>($T.class), $X);
