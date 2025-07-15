@@ -13,3 +13,9 @@ rules:
       $J.query("SELECT * FROM employees WHERE department_id = '" + $X + "'", new BeanPropertyRowMapper<>($T.class));
     fix: |
       $J.query("SELECT * FROM employees WHERE department_id = ?", new BeanPropertyRowMapper<>($T.class), $X);
+  - id: jdbc-sqli-fix
+    languages: [java]
+    message: "SQL Injection in JdbcTemplate"
+    severity: ERROR
+    pattern: jdbcTemplate.query("SELECT * FROM $TABLE WHERE $COLUMN = '" + $VAL + "'", $ROW_MAPPER)
+    fix: jdbcTemplate.query("SELECT * FROM $TABLE WHERE $COLUMN = ?", $ROW_MAPPER, $VAL)
