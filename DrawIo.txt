@@ -1,40 +1,59 @@
 graph TD
-    A((Start)):::start --> B(Prepare Source<br>Git Clone / ZIP / Sparse):::source
-    B --> C(Scan Engine<br>Tool Orchestration):::engine
-    C --> D[Run Scanners<br>Semgrep, Snyk, CodeQL, Trivy, etc.]:::scan
-    D --> E[Parse Scan Reports]:::parse
 
-    E --> F(Read CVE Map<br>CVE to CWE):::map
-    F --> F2[Map CWE to Rule or Fixer<br>Semgrep / JavaParser]:::map
-    F2 --> G{Rule Match Found?}:::decision
+A((Start)):::start --> A1(Prepare Source<br>Git Clone / ZIP / Sparse):::source
+A1 --> C(Scan Engine<br>Tool Orchestration):::engine
 
-    G -- No --> I(Log and Skip):::skip
-    G -- Yes --> H1[Check Autofix Eligibility]:::map
-    H1 --> H2{Can Auto-Fix?}:::decision
+%% Static and Dependency Scanning
+subgraph Static_and_Dependency_Scanning
+    C --> B1["🔍 Semgrep"]:::scan
+    C --> B2["📦 Snyk / Trivy / OWASP DC"]:::scan
+    C --> B3["🔑 GitLeaks / TruffleHog"]:::scan
+    B1 --> B4["📄 Unified Scan Report (SARIF / JSON)"]:::report
+    B2 --> B4
+    B3 --> B4
+end
 
-    H2 -- No --> I
-    H2 -- Yes --> H3{Choose Fix Engine}:::decision
-    H3 -- Semgrep --> H4(Autofix Engine<br>Semgrep fix):::fix
-    H3 -- JavaParser --> H5(Autofix Engine<br>JavaParser CLI):::fix
-    H3 -- GPT --> H6(Autofix Engine<br>GPT-based Fixer):::fix
+%% CVE to Fix Mapping
+subgraph CVE_to_Fix_Mapping
+    B4 --> C1["🧠 CVE-to-Rule Mapping Engine"]:::map
+    C1 --> C2["📘 CWE → Fixer Map"]:::map
+end
 
-    H4 --> V[Validate Fix<br>Compile and Test]:::validate
-    H5 --> V
-    H6 --> V
+%% Autofix and Patch Engine
+subgraph Autofix_and_Patch_Engine
+    C2 --> D1{"🎯 Match Found & Eligible?"}:::decision
+    D1 -- No --> D5["📋 Log + Notify Developer"]:::skip
+    D1 -- Yes --> D2["⚙️ Choose Autofix Tool"]:::fix
+    D2 --> D3a["🛠 Semgrep Fix"]:::fix
+    D2 --> D3b["🛠 JavaParser Fix"]:::fix
+    D2 --> D3c["🛠 Snyk Patch CLI"]:::fix
+    D2 --> D3d["🤖 GPT Fixer"]:::fix
+    D3a --> D4["🧪 Validate Fix (Tests, Compile)"]:::validate
+    D3b --> D4
+    D3c --> D4
+    D3d --> D4
+    D4 --> D6["📦 Create Patch / PR"]:::patch
+end
 
-    V --> J[Generate Patch]:::patch
-    J --> K(Create Branch & Commit):::commit
-    K --> L[[Push PR to GitHub]]:::pr
-    L --> M((End of SAST Remediation)):::endNode
+%% PR Review & Merge
+subgraph PR_Review_and_Merge
+    D6 --> E1["🔁 PR Review (Dev + Security)"]:::review
+    E1 --> E2{"✅ Approved?"}:::decision
+    E2 -- Yes --> E3["📥 Merge + Trigger CI"]:::ci
+    E2 -- No --> E4["🛑 Request Changes"]:::fail
+end
 
-    M --> DA[Run DAST Scan on Staging URL]:::dast
-    DA --> DB[Generate DAST Report<br>JSON or HTML]:::report
-    DB --> N[Trigger CI Pipeline<br>Run Tests, Lint, Build]:::ci
-    N --> O{CI Passed?}:::decision
+%% CI/CD & Post-Deployment
+subgraph CI_CD_and_Post_Deployment
+    E3 --> F1["🧪 CI: Test, Lint, Build"]:::ci
+    F1 --> F2{"✅ CI Passed?"}:::decision
+    F2 -- Yes --> F3["🚀 CD: Deploy to Staging/Prod"]:::cd
+    F2 -- No --> F4["❗ Alert Developer"]:::fail
+    F3 --> G1["🌐 DAST Scan (ZAP / Burp)"]:::dast
+    G1 --> G2["📊 DAST Report"]:::report
+end
 
-    O -- Yes --> P[Trigger CD Pipeline<br>Deploy to Prod]:::cd
-    O -- No --> Q[Log CI Failures<br>Notify Developer]:::fail
-
+%% Styling
 classDef start fill:#98FB98,stroke:#333,stroke-width:2;
 classDef source fill:#E0FFFF;
 classDef engine fill:#F0E68C;
@@ -54,3 +73,4 @@ classDef ci fill:#20B2AA;
 classDef cd fill:#66CDAA;
 classDef fail fill:#FF6347;
 classDef validate fill:#B3FFB3;
+classDef review fill:#F4A460;
