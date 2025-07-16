@@ -1,0 +1,22 @@
+rules:
+  - id: java-spring-xss-responseentity
+    languages: [java]
+    severity: ERROR
+    message: "Detected direct user input in HTTP response. Use HtmlUtils.htmlEscape(...) to sanitize."
+    metadata:
+      category: security
+      cwe: "CWE-79"
+      confidence: HIGH
+    pattern: |
+      ResponseEntity.ok("..." + $USER_INPUT)
+    metavariables:
+      $USER_INPUT:
+        metavariable-pattern: $X
+        patterns:
+          - pattern: $X
+          - pattern-inside: |
+              public $RET $METHOD(..., @RequestParam $TYPE $X, ...) {
+                ...
+              }
+    fix: |
+      ResponseEntity.ok("..." + HtmlUtils.htmlEscape($USER_INPUT))

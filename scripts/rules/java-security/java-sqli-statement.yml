@@ -1,0 +1,7 @@
+rules:
+  - id: java-sqli-statement
+    languages: [java]
+    severity: ERROR
+    message: "Avoid using Statement; use PreparedStatement instead."
+    pattern: |
+      Statement $S = $C.createStatement();

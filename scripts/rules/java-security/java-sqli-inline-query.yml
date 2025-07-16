@@ -1,0 +1,12 @@
+rules:
+  - id: java-sqli-inline-query
+    languages: [java]
+    severity: ERROR
+    message: "SQL Injection in JdbcTemplate"
+    patterns:
+      - pattern: jdbcTemplate.query($SQL + $VAR, ...)
+    metadata:
+      cwe: CWE-89
+      category: security
+      technology: [java, spring]
+      confidence: HIGH

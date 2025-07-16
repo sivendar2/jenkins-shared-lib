@@ -1,6 +1,8 @@
 import csv
 import os
 import xml.etree.ElementTree as ET
+
+import requests
 def read_cve_database(csv_file):
     print(f"📖 Reading CVEs from {csv_file}...")
     cves = []
@@ -15,9 +17,86 @@ def match_cves_to_repo(cves, repo_path):
     # For now, assume all CVEs match
     return cves
 
-import os
-import xml.etree.ElementTree as ET
 
+def fetch_cve_data_from_osv(component):
+    url = "https://api.osv.dev/v1/query"
+    payload = {
+        "package": {
+            "name": component,
+            "ecosystem": "Maven"
+        }
+    }
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Failed to fetch data from OSV for {component}: {e}")
+        return None
+
+
+def map_cwe_to_semgrep_template(cwe_id):
+    """Return a basic Semgrep rule template snippet for given CWE."""
+    cwe_rules = {
+        "CWE-95": {
+            "id": "cwe-95-code-injection",
+            "message": "Potential code injection detected.",
+            "patterns": [
+                {"pattern-either": [{"pattern": "eval($X)"}, {"pattern": "exec($X)"}]}
+            ],
+            "languages": ["javascript", "python"],
+            "severity": "ERROR",
+            "fix": None  # You can add autofix pattern here if applicable
+        },
+        "CWE-89": {
+            "id": "cwe-89-sql-injection",
+            "message": "Possible SQL injection via string concatenation.",
+            "patterns": [
+                {"pattern": "$QUERY + $UNTRUSTED_INPUT"}
+            ],
+            "languages": ["java", "python"],
+            "severity": "ERROR",
+            "fix": None
+        }
+        # Add more CWE mappings as needed
+    }
+    return cwe_rules.get(cwe_id)
+
+def generate_semgrep_rule_yaml(cve_data):
+    """Generate a Semgrep YAML rule from CVE info and CWE mapping."""
+    cwe_id = None
+    if "cve" in cve_data:
+        # Extract CWE ID from CVE (this depends on your CVE format)
+        cwe_id = cve_data["cve"].get("cwe")
+    elif "vulns" in cve_data:
+        # OSV format
+        cwe_id = cve_data["vulns"][0].get("cwe", None) if cve_data["vulns"] else None
+
+    if not cwe_id:
+        print("⚠️ No CWE found; skipping rule generation")
+        return None
+
+    template = map_cwe_to_semgrep_template(cwe_id)
+    if not template:
+        print(f"⚠️ No Semgrep template found for CWE {cwe_id}")
+        return None
+
+    # Fill in additional info from CVE data if needed
+    yaml_rule = {
+        "rules": [
+            {
+                "id": template["id"],
+                "message": template["message"],
+                "severity": template["severity"],
+                "languages": template["languages"],
+                "patterns": template["patterns"]
+            }
+        ]
+    }
+    if template.get("fix"):
+        yaml_rule["rules"][0]["fix"] = template["fix"]
+
+    return yaml.dump(yaml_rule, sort_keys=False)
 def apply_dependency_fix(cve, pom_file_path):
     print(f"🛠️ Patching {pom_file_path} for {cve.get('cve_id')}...")
 
