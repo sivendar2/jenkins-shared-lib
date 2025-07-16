@@ -3,41 +3,54 @@ graph TD
     B --> C(Scan Engine<br>Tool Orchestration):::engine
     C --> D[Run Scanners<br>Semgrep, Snyk, CodeQL, Trivy, etc.]:::scan
     D --> E[Parse Scan Reports]:::parse
-    E --> F(Read CVE Map):::map
-    F --> G{Rule Match Found?}:::decision
+
+    E --> F(Read CVE Map<br>CVE to CWE):::map
+    F --> F2[Map CWE to Rule or Fixer<br>Semgrep / JavaParser]:::map
+    F2 --> G{Rule Match Found?}:::decision
 
     G -- No --> I(Log and Skip):::skip
     G -- Yes --> H1[Check Autofix Eligibility]:::map
     H1 --> H2{Can Auto-Fix?}:::decision
-    H2 -- No --> I
-    H2 -- Yes --> H(Autofix Engine<br>Semgrep Autofix Only):::fix
 
-    H --> J[Generate Patch]:::patch
+    H2 -- No --> I
+    H2 -- Yes --> H3{Choose Fix Engine}:::decision
+    H3 -- Semgrep --> H4(Autofix Engine<br>Semgrep fix):::fix
+    H3 -- JavaParser --> H5(Autofix Engine<br>JavaParser CLI):::fix
+    H3 -- GPT --> H6(Autofix Engine<br>GPT-based Fixer):::fix
+
+    H4 --> V[Validate Fix<br>Compile and Test]:::validate
+    H5 --> V
+    H6 --> V
+
+    V --> J[Generate Patch]:::patch
     J --> K(Create Branch & Commit):::commit
     K --> L[[Push PR to GitHub]]:::pr
     L --> M((End of SAST Remediation)):::endNode
+
     M --> DA[Run DAST Scan on Staging URL]:::dast
-    DA --> DB[Generate DAST Report - JSON or HTML]:::report
+    DA --> DB[Generate DAST Report<br>JSON or HTML]:::report
     DB --> N[Trigger CI Pipeline<br>Run Tests, Lint, Build]:::ci
     N --> O{CI Passed?}:::decision
+
     O -- Yes --> P[Trigger CD Pipeline<br>Deploy to Prod]:::cd
     O -- No --> Q[Log CI Failures<br>Notify Developer]:::fail
 
-classDef start fill:#B3E5FC,stroke:#0288D1,color:#000,font-weight:bold;
-classDef endNode fill:#B3E5FC,stroke:#0288D1,color:#000,font-weight:bold;
-classDef source fill:#E8F5E9,stroke:#388E3C,color:#000;
-classDef engine fill:#FFF3E0,stroke:#F57C00,color:#000;
-classDef scan fill:#FFFDE7,stroke:#FBC02D,color:#000;
-classDef parse fill:#F3E5F5,stroke:#7B1FA2,color:#000;
-classDef map fill:#FBE9E7,stroke:#E64A19,color:#000;
-classDef decision fill:#E1F5FE,stroke:#0288D1,color:#000,font-weight:bold;
-classDef fix fill:#E0F2F1,stroke:#00796B,color:#000;
-classDef skip fill:#FFEBEE,stroke:#C62828,color:#000;
-classDef patch fill:#F1F8E9,stroke:#689F38,color:#000;
-classDef commit fill:#EDE7F6,stroke:#512DA8,color:#000;
-classDef pr fill:#E3F2FD,stroke:#1976D2,color:#000;
-classDef ci fill:#E0F7FA,stroke:#00ACC1,color:#000;
-classDef cd fill:#F1F8E9,stroke:#388E3C,color:#000;
-classDef fail fill:#FFCDD2,stroke:#D32F2F,color:#000;
-classDef dast fill:#E3F2FD,stroke:#3F51B5,color:#000;
-classDef report fill:#E1F5FE,stroke:#0288D1,color:#000;
+classDef start fill:#98FB98,stroke:#333,stroke-width:2;
+classDef source fill:#E0FFFF;
+classDef engine fill:#F0E68C;
+classDef scan fill:#FFD700;
+classDef parse fill:#F5DEB3;
+classDef map fill:#D8BFD8;
+classDef decision fill:#D3D3D3,stroke:#000,stroke-width:2,stroke-dasharray: 5 5;
+classDef fix fill:#FFB6C1;
+classDef patch fill:#ADD8E6;
+classDef commit fill:#B0E0E6;
+classDef pr fill:#DDA0DD;
+classDef endNode fill:#90EE90;
+classDef skip fill:#FFE4E1;
+classDef dast fill:#F08080;
+classDef report fill:#FA8072;
+classDef ci fill:#20B2AA;
+classDef cd fill:#66CDAA;
+classDef fail fill:#FF6347;
+classDef validate fill:#B3FFB3;
