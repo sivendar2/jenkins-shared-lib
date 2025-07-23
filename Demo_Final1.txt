@@ -1,0 +1,53 @@
+graph TD
+    A((Start)):::start --> B(Prepare Source\nGit Clone):::source
+    B --> C(Scan Engine\nTool Orchestration):::engine
+
+    subgraph Scan_Engines["Run Scanners (Scan Engines)"]
+        direction TB
+        D1[Semgrep]:::scan
+        D2[Snyk]:::scan
+        D3[GitLeaks]:::scan
+    end
+
+    C --> Scan_Engines
+    Scan_Engines --> E[Parse Scan Reports]:::parse
+    E --> F(Read CVE Map\nCVE → CWE):::map
+    F --> F2[Map CWE → Rule / Fixer\nPrebuilt Rules: Semgrep, JavaParser]:::map
+    F2 --> G{Rule Match Found?}:::decision
+
+    G -- No --> I(Log and Skip):::skip
+    G -- Yes --> H{Can Auto-Fix?}:::decision
+
+    H -- No --> I
+
+    H -- Yes --> H3(Choose Fix Engine):::decision
+
+    subgraph Autofix_Engines["Autofix Engines"]
+        direction TB
+        H3 --> H4[Semgrep Fix]:::fix
+        H3 --> H5[JavaParser Fix]:::fix
+        H3 --> H6[GPT Fix]:::fix
+    end
+
+    H4 --> J[Generate Patch]:::patch
+    H5 --> J
+    H6 --> J
+
+    J --> K(Create Branch & Commit):::commit
+    K --> L[[Push PR to GitHub]]:::pr
+    L --> M((End of SAST Remediation)):::endNode
+
+%% Class defs
+classDef start fill:#98FB98,stroke:#333,stroke-width:2;
+classDef source fill:#E0FFFF;
+classDef engine fill:#F0E68C;
+classDef scan fill:#FFD700;
+classDef parse fill:#F5DEB3;
+classDef map fill:#D8BFD8;
+classDef decision fill:#D3D3D3,stroke:#000,stroke-width:2,stroke-dasharray: 5 5;
+classDef fix fill:#FFB6C1;
+classDef patch fill:#ADD8E6;
+classDef commit fill:#B0E0E6;
+classDef pr fill:#DDA0DD;
+classDef endNode fill:#90EE90;
+classDef skip fill:#FFE4E1;

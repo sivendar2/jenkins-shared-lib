@@ -1,0 +1,244 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.0.4 Chrome/138.0.7204.97 Electron/37.2.1 Safari/537.36" version="28.0.4">
+  <diagram name="Page-1" id="kAcOJU2G6_lBeRuoMnvE">
+    <mxGraphModel dx="1011" dy="501" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-1" value="CI_CD_and_Post_Deployment" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="67" y="1876" width="585" height="665" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-2" value="PR_Review_and_Merge" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="305" y="1368" width="569" height="458" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-3" value="Autofix_and_Patch_Engine" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="20" y="555" width="992" height="764" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-4" value="CVE_to_Fix_Mapping" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="227" y="120" width="330" height="384" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-5" value="Start" style="ellipse;aspect=fixed;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="367" y="20" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-6" value="📄 Existing Unified Vulnerability Report (SARIF / JSON)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="262" y="145" width="260" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-7" value="🧠 CVE-to-Rule Mapping Engine" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="262" y="297" width="260" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-8" value="📘 CWE → Fixer Map" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="285" y="425" width="214" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-9" value="🎯 Match Found &amp; Eligible?" style="rhombus;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="266" y="579" width="251" height="251" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-10" value="📋 Log + Notify Developer" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="57" y="903" width="250" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-11" value="⚙️ Choose Autofix Tool" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="423" y="903" width="227" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-12" value="🛠 Semgrep Fix" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="78" y="1007" width="168" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-13" value="🛠 JavaParser Fix" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="328" y="1007" width="183" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-14" value="🛠 Snyk Patch CLI" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="561" y="1007" width="185" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-15" value="🤖 GPT Fixer" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="795" y="1007" width="156" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-16" value="🧪 Validate Fix (Tests, Compile)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="519" y="1111" width="260" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-17" value="📦 Create Patch / PR" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="541" y="1239" width="215" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-18" value="🔁 PR Review (Dev + Security)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="519" y="1393" width="260" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-19" value="✅ Approved?" style="rhombus;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="572" y="1521" width="153" height="153" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-20" value="📥 Merge + Trigger CI" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="340" y="1747" width="216" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-21" value="🛑 Request Changes" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="605" y="1747" width="207" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-22" value="🧪 CI: Test, Lint, Build" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="335" y="1901" width="225" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-23" value="✅ CI Passed?" style="rhombus;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="371" y="2005" width="153" height="153" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-24" value="🚀 CD: Deploy to Staging/Prod" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="102" y="2230" width="260" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-25" value="❗ Alert Developer" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="412" y="2242" width="198" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-26" value="🌐 DAST Scan (ZAP / Burp)" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="104" y="2358" width="255" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-27" value="📊 DAST Report" style="whiteSpace=wrap;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="144" y="2462" width="175" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-28" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-5" target="5_F_OlYpWLDs57yeFY2C-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-29" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-6" target="5_F_OlYpWLDs57yeFY2C-7">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-30" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-7" target="5_F_OlYpWLDs57yeFY2C-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-31" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-8" target="5_F_OlYpWLDs57yeFY2C-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-32" value="No" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.89;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-9" target="5_F_OlYpWLDs57yeFY2C-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="183" y="867" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-33" value="Yes" style="curved=1;startArrow=none;endArrow=block;exitX=0.95;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-9" target="5_F_OlYpWLDs57yeFY2C-11">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="536" y="867" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-34" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.79;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-11" target="5_F_OlYpWLDs57yeFY2C-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="162" y="982" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-35" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.23;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-11" target="5_F_OlYpWLDs57yeFY2C-13">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="419" y="982" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-36" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.77;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-11" target="5_F_OlYpWLDs57yeFY2C-14">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="653" y="982" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-37" value="" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.82;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-11" target="5_F_OlYpWLDs57yeFY2C-15">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="873" y="982" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-38" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0;entryY=0.28;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-12" target="5_F_OlYpWLDs57yeFY2C-16">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="162" y="1086" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-39" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0;entryY=0.04;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-13" target="5_F_OlYpWLDs57yeFY2C-16">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="419" y="1086" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-40" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.51;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-14" target="5_F_OlYpWLDs57yeFY2C-16">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="653" y="1086" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-41" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=1;entryY=0.03;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-15" target="5_F_OlYpWLDs57yeFY2C-16">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="873" y="1086" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-42" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-16" target="5_F_OlYpWLDs57yeFY2C-17">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-43" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-17" target="5_F_OlYpWLDs57yeFY2C-18">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-44" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-18" target="5_F_OlYpWLDs57yeFY2C-19">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-45" value="Yes" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.78;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-19" target="5_F_OlYpWLDs57yeFY2C-20">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="448" y="1711" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-46" value="No" style="curved=1;startArrow=none;endArrow=block;exitX=0.77;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-19" target="5_F_OlYpWLDs57yeFY2C-21">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="709" y="1711" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-47" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-20" target="5_F_OlYpWLDs57yeFY2C-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-48" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-22" target="5_F_OlYpWLDs57yeFY2C-23">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-49" value="Yes" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=0.76;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-23" target="5_F_OlYpWLDs57yeFY2C-24">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="232" y="2194" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-50" value="No" style="curved=1;startArrow=none;endArrow=block;exitX=0.78;exitY=1;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-23" target="5_F_OlYpWLDs57yeFY2C-25">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="511" y="2194" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-51" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1.01;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-24" target="5_F_OlYpWLDs57yeFY2C-26">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5_F_OlYpWLDs57yeFY2C-52" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1.01;entryX=0.5;entryY=0.01;rounded=0;" edge="1" parent="1" source="5_F_OlYpWLDs57yeFY2C-26" target="5_F_OlYpWLDs57yeFY2C-27">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

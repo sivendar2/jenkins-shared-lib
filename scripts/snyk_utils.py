@@ -93,7 +93,7 @@ def sync_snyk_fixes(report_path, pom_file_path):
                     gav = f"{group}:{artifact}"
                     maven_pkg_format = f"pkg:maven/{group}/{artifact}"
 
-                    print(f"🧪 Checking: Snyk={pkg} | GAV={gav} | MavenPkg={maven_pkg_format}")
+                #    print(f"🧪 Checking: Snyk={pkg} | GAV={gav} | MavenPkg={maven_pkg_format}")
 
                     if pkg in (artifact, gav, maven_pkg_format):
                         old_version = version.text

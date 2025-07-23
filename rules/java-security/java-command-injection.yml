@@ -1,0 +1,13 @@
+rules:
+  - id: java-command-injection
+    languages: [java]
+    severity: ERROR
+    message: "Avoid using Runtime.exec() with user-controlled input (Command Injection)"
+    metadata:
+      cwe: "CWE-77"
+      category: security
+      technology: [java, spring]
+      confidence: HIGH
+    patterns:
+      - pattern: Runtime.getRuntime().exec($CMD)
+      - pattern-not: Runtime.getRuntime().exec("...")

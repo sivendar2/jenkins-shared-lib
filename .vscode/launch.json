@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug main.py with args",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/main.py",
+      "args": [
+        "--repo-url", "https://github.com/sivendar2/employee-department-1.git",
+        "--branch-name", "fix/11security-20250719",
+         "--cve-file", "${workspaceFolder}/scripts/cves.csv",
+        "--semgrep-rules", "auto,rules/java-security,p/owasp-top-ten,p/cwe-top-25,p/security-audit",
+        "--slack-webhook", "https://hooks.slack.com/services/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"
+      ],
+      "console": "integratedTerminal"
+    }
+  ]
+}

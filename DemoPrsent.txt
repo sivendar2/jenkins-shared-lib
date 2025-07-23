@@ -1,0 +1,75 @@
+graph TD
+
+A((Start)):::start --> A1(Prepare Source<br>Git Clone / ZIP / Sparse):::source
+A1 --> C(Scan Engine<br>Tool Orchestration):::engine
+
+%% Static and Dependency Scanning
+subgraph Static_and_Dependency_Scanning
+    C --> B1["🔍 Semgrep"]:::scan
+    C --> B2["📦 Snyk / Trivy / OWASP DC"]:::scan
+    C --> B3["🔑 GitLeaks / TruffleHog"]:::scan
+end
+
+%% CVE to Fix Mapping
+subgraph CVE_to_Fix_Mapping
+    B1 --> C1["🧠 CVE-to-Rule Mapping Engine"]:::map
+    B2 --> C1
+    B3 --> C1
+    C1 --> C2["📘 CWE → Fixer Map"]:::map
+end
+
+%% Autofix and Patch Engine
+subgraph Autofix_and_Patch_Engine
+    C2 --> D1{"🎯 Match Found & Eligible?"}:::decision
+    D1 -- No --> D5["📋 Log + Notify Developer"]:::skip
+    D1 -- Yes --> D2["⚙️ Choose Autofix Tool"]:::fix
+    D2 --> D3a["🛠 Semgrep Fix"]:::fix
+    D2 --> D3b["🛠 JavaParser Fix"]:::fix
+    D2 --> D3c["🛠 Snyk Patch CLI"]:::fix
+    D2 --> D3d["🤖 GPT Fixer"]:::fix
+    D3a --> D4["🧪 Validate Fix (Tests, Compile)"]:::validate
+    D3b --> D4
+    D3c --> D4
+    D3d --> D4
+    D4 --> D6["📦 Create Patch / PR"]:::patch
+end
+
+%% PR Review & Merge
+subgraph PR_Review_and_Merge
+    D6 --> E1["🔁 PR Review (Dev + Security)"]:::review
+    E1 --> E2{"✅ Approved?"}:::decision
+    E2 -- Yes --> E3["📥 Merge + Trigger CI"]:::ci
+    E2 -- No --> E4["🛑 Request Changes"]:::fail
+end
+
+%% CI/CD & Post-Deployment
+subgraph CI_CD_and_Post_Deployment
+    E3 --> F1["🧪 CI: Test, Lint, Build"]:::ci
+    F1 --> F2{"✅ CI Passed?"}:::decision
+    F2 -- Yes --> F3["🚀 CD: Deploy to Staging/Prod"]:::cd
+    F2 -- No --> F4["❗ Alert Developer"]:::fail
+    F3 --> G1["🌐 DAST Scan (ZAP / Burp)"]:::dast
+    G1 --> G2["📊 DAST Report"]:::report
+end
+
+%% Styling
+classDef start fill:#98FB98,stroke:#333,stroke-width:2;
+classDef source fill:#E0FFFF;
+classDef engine fill:#F0E68C;
+classDef scan fill:#FFD700;
+classDef parse fill:#F5DEB3;
+classDef map fill:#D8BFD8;
+classDef decision fill:#D3D3D3,stroke:#000,stroke-width:2,stroke-dasharray: 5 5;
+classDef fix fill:#FFB6C1;
+classDef patch fill:#ADD8E6;
+classDef commit fill:#B0E0E6;
+classDef pr fill:#DDA0DD;
+classDef endNode fill:#90EE90;
+classDef skip fill:#FFE4E1;
+classDef dast fill:#F08080;
+classDef report fill:#FA8072;
+classDef ci fill:#20B2AA;
+classDef cd fill:#66CDAA;
+classDef fail fill:#FF6347;
+classDef validate fill:#B3FFB3;
+classDef review fill:#F4A460;

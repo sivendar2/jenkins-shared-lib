@@ -1,9 +1,10 @@
 import csv
+import json
 import os
 import xml.etree.ElementTree as ET
 
 import requests
-def read_cve_database(csv_file):
+def read_cve_database1(csv_file):
     print(f"📖 Reading CVEs from {csv_file}...")
     cves = []
     with open(csv_file, mode="r", encoding="utf-8") as f:
@@ -11,6 +12,27 @@ def read_cve_database(csv_file):
         for row in reader:
             cves.append(row)
     return cves
+def read_cve_database(file_path):
+    cve_list = []
+
+    # ✅ Ensure output directory exists
+    os.makedirs("output", exist_ok=True)
+
+    with open(file_path, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            cve_list.append(row)
+
+    # ✅ Save mapping as both JSON and CSV
+    with open('output/cve_cwe_mapping.json', 'w') as f:
+        json.dump(cve_list, f, indent=2)
+
+    with open('output/cve_cwe_mapping.csv', 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=["cve_id", "component", "remediation", "cwe_id"])
+        writer.writeheader()
+        writer.writerows(cve_list)
+
+    return cve_list
 
 def match_cves_to_repo(cves, repo_path):
     print("Matching CVEs to repo...")
@@ -32,7 +54,15 @@ def fetch_cve_data_from_osv(component):
         return response.json()
     except requests.RequestException as e:
         print(f"Failed to fetch data from OSV for {component}: {e}")
-        return None
+def load_cwe_to_rule_map(csv_file):
+    mapping = {}
+    with open(csv_file, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            cwe = row["CWE"].strip()
+            rule = row["SemgrepRule"].strip()
+            mapping[cwe] = rule
+    return mapping
 
 
 def map_cwe_to_semgrep_template(cwe_id):
@@ -76,27 +106,25 @@ def generate_semgrep_rule_yaml(cve_data):
         print("⚠️ No CWE found; skipping rule generation")
         return None
 
-    template = map_cwe_to_semgrep_template(cwe_id)
-    if not template:
-        print(f"⚠️ No Semgrep template found for CWE {cwe_id}")
-        return None
+   # template = map_cwe_to_semgrep_template(cwe_id)
+    #if not template:
+     #   print(f"⚠️ No Semgrep template found for CWE {cwe_id}")
+      #  return None
 
     # Fill in additional info from CVE data if needed
-    yaml_rule = {
-        "rules": [
-            {
-                "id": template["id"],
-                "message": template["message"],
-                "severity": template["severity"],
-                "languages": template["languages"],
-                "patterns": template["patterns"]
-            }
-        ]
-    }
-    if template.get("fix"):
-        yaml_rule["rules"][0]["fix"] = template["fix"]
+   # yaml_rule = {
+    #    "rules": [
+     #       {
+      #          "id": template["id"],
+       ##        "severity": template["severity"],
+         #       "languages": template["languages"],
+          ## }
+        #]
+    #}
+    #if template.get("fix"):
+     #   yaml_rule["rules"][0]["fix"] = template["fix"]
 
-    return yaml.dump(yaml_rule, sort_keys=False)
+    #return yaml.dump(yaml_rule, sort_keys=False)
 def apply_dependency_fix(cve, pom_file_path):
     print(f"🛠️ Patching {pom_file_path} for {cve.get('cve_id')}...")
 

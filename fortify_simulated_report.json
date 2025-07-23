@@ -1,0 +1,61 @@
+{
+  "project": "securefix-demo",
+  "scan_date": "2025-07-18T15:00:00Z",
+  "issues": [
+    {
+      "id": "FORTIFY-001",
+      "engine": "Fortify SCA",
+      "category": "Command Injection",
+      "cwe": "78",
+      "file": "src/main/java/com/ameya/controller/ServerController.java",
+      "line": 15,
+      "function": "executeCommand",
+      "message": "Unvalidated command parameter passed to Runtime.exec()",
+      "severity": "High"
+    },
+    {
+      "id": "FORTIFY-002",
+      "engine": "Fortify SCA",
+      "category": "Cross-Site Scripting",
+      "cwe": "79",
+      "file": "src/main/java/com/ameya/controller/FeedbackController.java",
+      "line": 12,
+      "function": "submitFeedback",
+      "message": "Reflected user input in HTTP response without encoding",
+      "severity": "Medium"
+    },
+    {
+      "id": "FORTIFY-003",
+      "engine": "Fortify SCA",
+      "category": "SQL Injection",
+      "cwe": "89",
+      "file": "src/main/java/com/ameya/service/EmployeeInfoBusinessService.java",
+      "line": 45,
+      "function": "getEmployeesByDepartment",
+      "message": "SQL query built using untrusted input",
+      "severity": "High"
+    },
+    {
+      "id": "FORTIFY-004",
+      "engine": "Fortify SCA",
+      "category": "SQL Injection",
+      "cwe": "89",
+      "file": "src/main/java/com/ameya/service/VulnerableApp.java",
+      "line": 7,
+      "function": "authenticateUser",
+      "message": "SQL statement created using direct string concatenation",
+      "severity": "Critical"
+    },
+    {
+      "id": "FORTIFY-005",
+      "engine": "Fortify SCA",
+      "category": "Log Injection (JNDI)",
+      "cwe": "20",
+      "file": "src/main/java/com/ameya/controller/EmployeeController.java",
+      "line": 55,
+      "function": "getEmployeesByDepartmentSortedByName1",
+      "message": "Logging untrusted data can lead to remote code execution in vulnerable log4j",
+      "severity": "Critical"
+    }
+  ]
+}

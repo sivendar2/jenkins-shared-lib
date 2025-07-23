@@ -1,11 +1,15 @@
-import os, shutil, stat, subprocess, sys
-from datetime import datetime
+import os
+import shutil
+import stat
+import subprocess
+import sys
 
 def run_command(cmd, cwd=None, capture_output=False):
-    print(f"🟢 Running: {' '.join(cmd)}")
+    print(f"[RUN] {' '.join(cmd)}")
     result = subprocess.run(cmd, cwd=cwd, capture_output=capture_output, text=True)
     if result.returncode != 0:
-        print(f"❌ Command failed: {result.stderr}")
+        # Only treat as error if exit code is non-zero
+        print(f"❌ Command failed: {result.stderr.strip()}")
         sys.exit(1)
     return result.stdout.strip() if capture_output else None
 
@@ -16,15 +20,15 @@ def remove_readonly(func, path, _):
 def clone_repo(repo_url, branch_name, local_dir="repo"):
     if os.path.exists(local_dir):
         shutil.rmtree(local_dir, onerror=remove_readonly)
-    run_command(["git", "clone", repo_url, local_dir])
+    # Add --quiet to suppress progress messages
+    run_command(["git", "clone", "--quiet", repo_url, local_dir])
     # Check if branch exists locally or remotely
     existing_branches = run_command(["git", "branch", "--list", branch_name], cwd=local_dir, capture_output=True)
     if existing_branches:
-        run_command(["git", "checkout", branch_name], cwd=local_dir)
+        run_command(["git", "checkout", "-q", branch_name], cwd=local_dir)
     else:
-        run_command(["git", "checkout", "-b", branch_name], cwd=local_dir)
+        run_command(["git", "checkout", "-b", branch_name, "-q"], cwd=local_dir)
     return local_dir
-
 
 def create_commit_and_pr(repo_path, branch_name):
     run_command(["git", "add", "."], cwd=repo_path)
@@ -34,6 +38,7 @@ def create_commit_and_pr(repo_path, branch_name):
         return None
     run_command(["git", "commit", "-m", "fix: auto-remediated vulnerabilities"], cwd=repo_path)
     run_command(["git", "push", "-u", "origin", branch_name], cwd=repo_path)
+    # Create PR with GitHub CLI
     return run_command([
         "gh", "pr", "create",
         "--title", "Security Fix: Auto Remediation",

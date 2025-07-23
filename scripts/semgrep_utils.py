@@ -16,16 +16,65 @@ def run_command(cmd, cwd=None):
         sys.exit(1)
     return result.stdout
 
-def run_semgrep(semgrep_rules, repo_path):
+def run_semgrep1(semgrep_rules, repo_path):
     report_path = os.path.join(repo_path, "semgrep-report.json")
     
-    cmd = ["semgrep", "scan"]
+    cmd = ["semgrep"]
 
     # Add user-provided rule (folder or file)
     if semgrep_rules:
         cmd += ["--config", semgrep_rules]
 
     # Add trusted built-in rules
+    builtin_rules = [
+        "p/owasp-top-ten",
+        "p/cwe-top-25",
+        "p/security-audit"
+    ]
+    for rule in builtin_rules:
+        cmd += ["--config", rule]
+
+    #cmd += ["--autofix", "--json", repo_path]
+    cmd += ["--config=auto", "--autofix", "--json", "-o", report_path, repo_path]
+
+    print(f"🔍 Running Semgrep command:\n{' '.join(cmd)}")
+
+    with open(report_path, "w", encoding="utf-8") as outfile:
+        proc = subprocess.run(
+            cmd,
+            stdout=outfile,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8"
+        )
+
+    print(f"✅ SAST report saved to: {report_path}")
+
+    if proc.returncode not in (0, 1):
+        print(f"❌ Semgrep failed:\n{proc.stderr}")
+        sys.exit(proc.returncode)
+
+    try:
+        with open(report_path, "r", encoding="utf-8") as f:
+            findings = json.load(f)
+            print(f"📄 Loaded Semgrep findings from: {report_path}")
+    except json.JSONDecodeError as e:
+        print(f"❌ Failed to parse saved Semgrep report: {e}")
+        sys.exit(1)
+
+    return findings
+def run_semgrep(semgrep_rules, repo_path):
+    report_path = os.path.join(repo_path, "s")
+
+    cmd = ["semgrep", "scan"]
+
+    # semgrep_rules can be comma separated string of configs
+    if semgrep_rules:
+        rules_list = semgrep_rules.split(",")
+        for rule in rules_list:
+            cmd += ["--config", rule]
+
+    # Add built-in rules as well (optional if you want both)
     builtin_rules = [
         "p/owasp-top-ten",
         "p/cwe-top-25",
@@ -72,18 +121,32 @@ def suggest_fixes(findings):
         try:
             path = item["path"]
             start_line = item["start"]["line"]
+            code_snippet = item.get("lines", "")
+            metadata = item.get("extra", {}).get("metadata", {})
             message = item["extra"].get("message", "No message")
-            print(f"🛠️ Finding in: {path} @ line {start_line} - {message}")
+            check_id = item.get("check_id", "")
+            cwe = metadata.get("cwe", "CWE-UNKNOWN")
+
+            if isinstance(cwe, list):
+                cwe = cwe[0].split(":")[0]
+            elif isinstance(cwe, str):
+                cwe = cwe.split(":")[0]
+
+            print(f"🛠️ [{cwe}] {check_id} in: {path} @ line {start_line}")
             suggestions.append({
                 "file": path,
                 "line": start_line,
-                "message": message
+                "message": message,
+                "code": code_snippet,
+                "cwe": cwe,
+                "check_id": check_id
             })
         except KeyError as e:
-            print(f"⚠️ Skipping invalid finding due to missing key: {e}")
+            print(f"⚠️ Skipping finding due to missing key: {e}")
             continue
 
     return suggestions
+
 
 def apply_auto_fix(file_path, finding=None):
     print(f"🛠️ Applying fix to: {file_path}")
@@ -91,22 +154,10 @@ def apply_auto_fix(file_path, finding=None):
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
-
-        for i in range(len(lines)):
-            if "Statement" in lines[i] and "createStatement" in lines[i]:
-                lines[i] = lines[i].replace("Statement", "PreparedStatement").replace("createStatement", "prepareStatement")
-                changed = True
-            if "jdbcTemplate.query" in lines[i] and "+" in lines[i]:
-                lines[i] = (
-                    '        return jdbcTemplate.query("SELECT * FROM employees WHERE department_id = ?", '
-                    'new BeanPropertyRowMapper<>(Employee.class), departmentName);\n'
-                )
-                changed = True
-
         if changed:
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
-            print(f"✅ Simple fix applied: {file_path}")
+            print(f"✅ Simpleeee fix applied: {file_path}")
             return
     except Exception as e:
         print(f"❌ Failed to apply simple fix: {e}")

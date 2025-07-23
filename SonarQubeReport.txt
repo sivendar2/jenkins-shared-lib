@@ -1,0 +1,34 @@
+flowchart TD
+    A["Clone GitHub Repository"] --> B["Fetch SonarQube Report (JSON)"]
+
+    B --> C{Iterate Issues in Report}
+
+    C -->|Mapped in CWE JSON| D["Map Sonar Rule to CWE to Fix Strategy"]
+    C -->|Not Mapped| G3["OpenAI LLM Fixer"]
+
+    D --> E["Locate Source File and Line"]
+    E --> F["Extract Code Snippet"]
+
+subgraph CodeFixEngine ["CodeFix Engine"]
+    G1["Semgrep Autofix"]
+    G2["JavaParser Fixer"]
+    G3["OpenAI LLM Fixer"]
+    G4["Snyk Sync and Fix"]
+end
+
+    F --> G1
+    F --> G2
+    F --> G3
+    F --> G4
+
+    CodeFixEngine --> H["Check for Git Changes"]
+    H -->|Changes Detected| I["Create Fix Branch"]
+    I --> J["Commit Fixed Code"]
+    J --> K["Create Pull Request via GitHub CLI"]
+    K --> N["Send Notification to Reviewer for Review and Update Code"]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style CodeFixEngine fill:#e0f7fa,stroke:#00acc1,stroke-width:2px
+    style G3 fill:#ffe082,stroke:#ffa000,stroke-width:2px
+    style G4 fill:#c5cae9,stroke:#3949ab,stroke-width:2px
+    style N fill:#ffcc00,stroke:#ff9900,stroke-width:3px,color:#000000
