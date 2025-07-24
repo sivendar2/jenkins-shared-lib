@@ -1,0 +1,35 @@
+---
+config:
+  layout: fixed
+---
+flowchart LR
+ subgraph Scanners["Scanners"]
+        B1["Semgrep"]
+        C["Scan Engine: Tool Orchestration"]
+        B2["Snyk / Trivy / OWASP DC"]
+        B3["GitLeaks / TruffleHog"]
+  end
+    A1["Prepare Source: Git Clone / ZIP / Sparse"] --> C
+    C --> B1 & B2 & B3
+    B1 --> C1["CVE-to-Rule Mapping Engine"]
+    B2 --> C1
+    B3 --> C1
+    C1 --> C2["CWE to Fixer Map"]
+    C2 --> D1{"Match Found & Eligible?"}
+    D1 -- No --> D5["Log + Notify Developer"]
+    D1 -- Yes --> D2["Choose Autofix Tool"]
+    D2 --> D3a["Semgrep Fix"] & D3b["JavaParser Fix"] & D3c["Snyk Patch CLI"] & D3d["GPT Fixer"]
+    D3a --> D6["Create Patch / PR"]
+    D3b --> D6
+    D3c --> D6
+    D3d --> D6
+    D6 --> E1["PR Review: Dev + Security"]
+    E1 --> E2{"Approved?"}
+    E2 -- Yes --> E3["Merge + Trigger CI"]
+    E2 -- No --> E4["Request Changes"]
+    E3 --> F1["CI: Test, Lint, Build"]
+    F1 --> F2{"CI Passed?"}
+    F2 -- Yes --> F3["CD: Deploy to Staging/Prod"]
+    F2 -- No --> F4["Alert Developer"]
+    F3 --> G1["DAST Scan: ZAP / Burp"]
+    G1 --> G2["DAST Report"]
